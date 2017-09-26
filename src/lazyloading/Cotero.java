@@ -5,6 +5,7 @@
  */
 package lazyloading;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -19,9 +20,9 @@ public abstract class Cotero {
      * Se utiliza para cargar los elementos en la bolsa
      * @param _elemento 
      */
-    public abstract void cargarElementos(List<Elemento> _elemento);
+    public abstract void cargarElementos(ArrayList<Integer> elementos);
 
 
-    public abstract void moverElementos();
+    public abstract void moverElementos(int[] datos);
 
 }

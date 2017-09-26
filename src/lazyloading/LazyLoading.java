@@ -21,8 +21,7 @@ public class LazyLoading {
      */
     public static void main(String[] args) {
         // TODO code application logic here
-        Conectar conn= new Conectar();
-        
+                
         Wilson wilson = new Wilson();
         wilson.trabajar();
     }

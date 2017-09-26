@@ -22,103 +22,54 @@ import java.util.List;
  */
 public class Wilson extends Cotero {
 
+    private Proceso procesar;
+    private static String archivo = "/home/fray/NetBeansProjects/LazyLoading/src/Resource/carga.txt";
+    
     public Wilson() {
+        this.procesar = new Proceso(archivo);
     }
 
+    /**
+     * Metodo encargado de inicializar el trabajo de Wilson
+     */
     public void trabajar() {
-        /**
-         * Cargar el documento
-         */
+        
         ArrayList<Integer> datosDocumento = null;
-        String archivo = "/home/fray/NetBeansProjects/LazyLoading/src/Resource/carga.txt";
-        Proceso proceso = new Proceso(archivo);
+        
         try {
-            datosDocumento = proceso.procesarDocumento();
+            datosDocumento = this.procesar.procesarDocumento();
         } catch (Exception e) {
             System.out.print("Error: " + e.getMessage());
         }
+        
+        this.cargarElementos(datosDocumento);
+    }
 
+    @Override
+    public void cargarElementos(ArrayList<Integer> datosDocumento) {
+        
         int T = datosDocumento.get(0);
         datosDocumento.remove(0);
-
-        List<Elemento> elementos = new ArrayList<Elemento>();
-        proceso.recorrerDatos(T,datosDocumento, elementos);
-
-        //System.out.print("Elementos: " + elementos.size());
-        this.cargarElementos(elementos);
+        
+       int[] resultado = this.procesar.recorrerDatos(T,datosDocumento);
+       
+       for (int i=0;i<resultado.length;i++) {
+           
+            this.moverElementos(resultado);
+        }
+       
+       
     }
 
     @Override
-    public void cargarElementos(List<Elemento> _elementos) {
-        //logica para cargar los elementos en la bolsa de forma que cumpla las validaciones requeridas
-
-        int iteraciones = 0;
-        int i = 0;
-        for (Elemento elemento : _elementos) {
-            
-            iteraciones = elemento.getLinea();
-            
-            int mayor;
-            int menor=0;
-            for (int j = 0; j < iteraciones; j++) {
-                if (_elementos.get(j).getPeso() >= 50) {
-                    this.cargarBolsa(elemento, true);
-                    this.moverElementos();
-                    continue;
-                }
-                mayor = _elementos.get(j).getPeso();
-              //  if()
-                
-                
-                
-            }
-
-            i++;
-        }
-
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-//        int linea = 0;
-//        this.bolsa = new Bolsa();
-//        for (Elemento elemento : _elementos) {
-//            System.out.print("\nElemento: ");
-//            System.out.print("\n--Linea: " + elemento.getLinea());
-//            System.out.print("\n--peso: " + elemento.getPeso());
-//
-//            //  linea = elemento.getLinea();            
-//            //mientras linea == elemento.getLinea() while
-//            if (elemento.getPeso() >= 50) {
-//                this.cargarBolsa(elemento, true);
-//                this.moverElementos();
-//                continue;
-//            }
-//
-//        }
-    }
-
-    private void cargarBolsa(Elemento elemento, boolean bolsaNueva) {
-        if (bolsaNueva) {
-            this.bolsa = new Bolsa();
-        }
-        this.bolsa.addElemento(elemento);
-    }
-
-    @Override
-    public void moverElementos() {
-        //se deben mover los elementos de la bolsa al camion
-        //ordenar
-        this.ordenarElementos(this.bolsa.getPunyado());
+    public void moverElementos(int[] casos) {
         Camion camion = new Camion();
-        camion.cargarCamion();
+        camion.crearArchivo();
+        
+        for (int i=0;i<casos.length;i++) {
+            camion.cargarCamion(i+1, casos[i]);
+        }
+        camion.cerrar();
     }
 
     /**

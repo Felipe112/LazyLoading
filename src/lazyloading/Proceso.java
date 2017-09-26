@@ -12,7 +12,7 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- *
+ * Clase diseñada para manipular y procesar el trabajo especializado que wilson requiere.
  * @author fray
  */
 public class Proceso {
@@ -58,9 +58,11 @@ public class Proceso {
      * @param datos
      * @param elementos
      */
-    public void recorrerDatos(int T, ArrayList<Integer> datos, List<Elemento> elementos) {
-
+    public int[] recorrerDatos(int T, ArrayList<Integer> datos) {
+        Julie julie = new Julie();
+        
         int posicion = 0;
+        int[] resultado = new int[T]; 
         for (int i = 0; i < T; i++) {
             int N = datos.get(posicion);
             int[] arrayN = new int[N];
@@ -70,26 +72,47 @@ public class Proceso {
                 posicion2++;
             }
             this.ordenar(arrayN);
-            int item,mayor,menor,suma = 0;
-            item = this.mayor(arrayN);
-            mayor = arrayN[item];
-            int[] arrayN2 = this.remover(item, arrayN);
 
-           /* item = this.menor(arrayN);
-            menor = arrayN[item];
-            arrayN = this.remover(item, arrayN);*/
+            int suma = 0;
+            int contador = 0;
+            while (arrayN.length != 0) {
+                if (arrayN[0] >= 50) {
+                    System.out.println("Mover elemento mayor a 50:" + arrayN[0]);
+                    contador++;
+                    arrayN = this.remover(0, arrayN);
+                    continue;
+                }
 
-            //pruebas
-            System.out.println("Datos Mayor:" + mayor);
-           // System.out.println("Datos Menor:" + menor);
-            for (int k = 0; k < arrayN2.length; k++) {
-                System.out.println(k + ":" + arrayN2[k]);
+                int item, mayor, menor=0;
+                item = this.mayor(arrayN);
+                mayor = arrayN[item];
+                arrayN = this.remover(item, arrayN);
+
+                if (arrayN.length > 0) {
+                item = this.menor(arrayN);
+                menor = arrayN[item];
+                arrayN = this.remover(item, arrayN);
+                }
+                
+                
+                suma = suma + mayor + menor;
+
+                if (arrayN.length == 1) {
+                    suma = suma + arrayN[0];
+                    arrayN = this.remover(0, arrayN);
+                }
+
+                if (suma >= 30) //pruebas
+                {
+                    System.out.println("Mover elemento:" + suma);
+                    contador++;
+                    suma = 0;
+                }
             }
-
+            resultado[i]=contador;
             posicion = posicion + N + 1;
-            break;
         }
-
+        return resultado;
     }
 
     private void ordenar(int[] arreglo) {
@@ -138,15 +161,15 @@ public class Proceso {
     }
 
     private int[] remover(int posicion, int[] vector) {
-      
-    int[] nuevoArray = new int[vector.length - 1];
-     if (posicion > 0){
-           System.arraycopy(vector, 0, nuevoArray, 0, posicion);
-     }
-     if (nuevoArray.length > posicion){
-      System.arraycopy(vector, posicion + 1, nuevoArray, posicion, nuevoArray.length - posicion);
-     }
-     return nuevoArray;
+
+        int[] nuevoArray = new int[vector.length - 1];
+        if (posicion > 0) {
+            System.arraycopy(vector, 0, nuevoArray, 0, posicion);
+        }
+        if (nuevoArray.length > posicion) {
+            System.arraycopy(vector, posicion + 1, nuevoArray, posicion, nuevoArray.length - posicion);
+        }
+        return nuevoArray;
     }
 
     /**
@@ -194,5 +217,7 @@ public class Proceso {
         }
         return false;
     }
+      
+    
 
 }
